@@ -81,8 +81,7 @@ public class CalculatorController {
 		try {
 			results = calculator.calculateFromFile(file, operation);
 		} catch (IOException e1) {
-			return new ResponseEntity<>("The result couldn't be processed!",
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("The result couldn't be processed!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		// Evaluating and sending the result in the format requested

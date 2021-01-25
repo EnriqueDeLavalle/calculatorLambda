@@ -60,12 +60,13 @@ public class CalculatorServiceImpl implements CalculatorService {
 		// Taking the input stream from the MultipartFile
 		InputStream inputStream = file.getInputStream();
 
-		// Taking the pair of numbers separated by semicolon from each line of the file and applying the operation for each couple of numbers 
+		// Taking the pair of numbers separated by semicolon from each line of the file
+		// and applying the operation for each couple of numbers
 		return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines()
 				.collect(Collectors.toList()).parallelStream().map(pair -> {
-			Double numbers[] = Stream.of(pair.split(";")).map(Double::parseDouble).toArray(Double[]::new);
-			return calculate(numbers[0], numbers[1], operation);
-		}).collect(Collectors.toList());
+					Double numbers[] = Stream.of(pair.split(";")).map(Double::parseDouble).toArray(Double[]::new);
+					return calculate(numbers[0], numbers[1], operation);
+				}).collect(Collectors.toList());
 
 	}
 
