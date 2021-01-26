@@ -14,12 +14,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @Configuration
-public class CalculatorConfig {
+public class SwaggerConfig {
 
 	@Bean
 	public Docket swaggerConfiguration() {
 
-		return new Docket(DocumentationType.SWAGGER_2).select().paths(PathSelectors.ant("/calculatorLambda/*"))
+		return new Docket(DocumentationType.SWAGGER_2).select().paths(PathSelectors.any())
 				.apis(RequestHandlerSelectors.basePackage("com.epam")).build().apiInfo(apiDetails());
 	}
 
