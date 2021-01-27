@@ -84,7 +84,7 @@ public class CalculatorController {
 		List<Double> results = new ArrayList<Double>();
 		try {
 			results = calculator.calculateFromFile(file, operation);
-		} catch (IOException e1) {
+		} catch (Exception e1) {
 			return new ResponseEntity<>("The result couldn't be processed!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
