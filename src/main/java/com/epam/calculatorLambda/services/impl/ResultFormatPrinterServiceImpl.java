@@ -4,6 +4,8 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,13 +19,7 @@ public class ResultFormatPrinterServiceImpl implements ResultFormatPrinterServic
 
 	@Override
 	public String toFile(List<Double> result) throws IOException {
-
-		String toPrint = toScreen(result);
-		FileOutputStream fos = new FileOutputStream(CalculatorUtil.FILE_NAME);
-		DataOutputStream outStream = new DataOutputStream(new BufferedOutputStream(fos));
-		outStream.writeBytes(toPrint);
-		outStream.close();
-
+		Files.writeString(Path.of(CalculatorUtil.FILE_NAME),toScreen(result));
 		return "The result was written to the file processed!";
 	}
 
