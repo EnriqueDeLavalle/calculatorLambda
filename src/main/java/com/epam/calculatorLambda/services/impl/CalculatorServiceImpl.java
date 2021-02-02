@@ -36,11 +36,7 @@ public class CalculatorServiceImpl implements CalculatorService {
     @Override
     public List<Double> calculateFromFile(MultipartFile file, String operation) throws Exception {
 
-        // Taking the input stream from the MultipartFile
         InputStream inputStream = file.getInputStream();
-
-        // Taking the pair of numbers separated by semicolon from each line of the file
-        // and applying the operation for each couple of numbers
 
         return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
                 .lines()
