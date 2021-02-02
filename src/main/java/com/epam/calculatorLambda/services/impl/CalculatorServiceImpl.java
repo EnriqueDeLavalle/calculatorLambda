@@ -8,10 +8,10 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class CalculatorServiceImpl implements CalculatorService {
@@ -33,20 +33,26 @@ public class CalculatorServiceImpl implements CalculatorService {
         };
     }
 
-	@Override
-	public List<Double> calculateFromFile(MultipartFile file, String operation) throws Exception {
+    @Override
+    public List<Double> calculateFromFile(MultipartFile file, String operation) throws Exception {
 
         // Taking the input stream from the MultipartFile
         InputStream inputStream = file.getInputStream();
 
         // Taking the pair of numbers separated by semicolon from each line of the file
         // and applying the operation for each couple of numbers
-        return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines()
-                .collect(Collectors.toList()).parallelStream().map(pair -> {
-                    Double numbers[] = Stream.of(pair.split(";")).map(Double::parseDouble).toArray(Double[]::new);
-                    return calculate(numbers[0], numbers[1], operation);
-                }).collect(Collectors.toList());
 
+        return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
+                .lines()
+                .parallel()
+                .map(this::getDoubles)
+                .map(doubles -> calculate(doubles[0],doubles[1],operation))
+                .collect(Collectors.toList());
+
+    }
+
+    private Double[] getDoubles(String pair) {
+        return Arrays.stream(pair.split(";")).map(Double::parseDouble).toArray(Double[]::new);
     }
 
 }
