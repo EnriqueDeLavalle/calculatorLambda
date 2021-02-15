@@ -9,7 +9,7 @@ public class CalculatorUtil {
 	public static final String SCREEN = "SCREEN";
 	public static final String FILE_NAME = "Result.txt";
 
-	public static final List<String> operations = Arrays.asList("+", "-", "*", "/");
+	public static final List<String> operations = Arrays.asList("add", "sub", "mult", "div");
 	public static final List<String> resultFormats = Arrays.asList("SCREEN", "FILE");
 
 	public static Predicate<String> EvaluateOperation = str -> operations.contains(str);

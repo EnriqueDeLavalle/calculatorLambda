@@ -1,17 +1,17 @@
 package com.epam.calculatorLambda.services.impl;
 
-import com.epam.calculatorLambda.services.CalculatorService;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.epam.calculatorLambda.services.CalculatorService;
 
 @Service
 public class CalculatorServiceImpl implements CalculatorService {
@@ -23,12 +23,11 @@ public class CalculatorServiceImpl implements CalculatorService {
     @Override
     public Double calculate(Double number1, Double number2, String operation) {
 
-        // Evaluating operation
         return switch (operation) {
-            case "+" -> calculate(number1, number2, (x, y) -> x + y);
-            case "-" -> calculate(number1, number2, (x, y) -> x - y);
-            case "*" -> calculate(number1, number2, (x, y) -> x * y);
-            case "/" -> calculate(number1, number2, (x, y) -> x / y);
+            case "add" -> calculate(number1, number2, (x, y) -> x + y);
+            case "sub" -> calculate(number1, number2, (x, y) -> x - y);
+            case "mult" -> calculate(number1, number2, (x, y) -> x * y);
+            case "div" -> calculate(number1, number2, (x, y) -> x / y);
             default -> 0.0;
         };
     }
@@ -36,9 +35,7 @@ public class CalculatorServiceImpl implements CalculatorService {
     @Override
     public List<Double> calculateFromFile(MultipartFile file, String operation) throws Exception {
 
-        InputStream inputStream = file.getInputStream();
-
-        return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
+        return new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))
                 .lines()
                 .parallel()
                 .map(this::getDoubles)
@@ -48,7 +45,9 @@ public class CalculatorServiceImpl implements CalculatorService {
     }
 
     private Double[] getDoubles(String pair) {
-        return Arrays.stream(pair.split(";")).map(Double::parseDouble).toArray(Double[]::new);
+        return Arrays.stream(pair.split(";"))
+        		.map(Double::parseDouble)
+        		.toArray(Double[]::new);
     }
 
 }

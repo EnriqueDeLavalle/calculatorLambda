@@ -1,22 +1,17 @@
 package com.epam.calculatorLambda.controllers;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +34,6 @@ public class CalculatorController {
 			@RequestParam("number2") Double number2, @RequestParam("operation") String operation,
 			@RequestParam("resultFormat") String resultFormat) {
 
-		// Validating parameters
 		if (!CalculatorUtil.EvaluateOperation.test(operation)) {
 			return new ResponseEntity<>("Invalid operation!", HttpStatus.BAD_REQUEST);
 		}
@@ -47,10 +41,8 @@ public class CalculatorController {
 			return new ResponseEntity<>("Invalid result format!", HttpStatus.BAD_REQUEST);
 		}
 
-		// Processing request
 		Double result = calculator.calculate(number1, number2, operation);
 
-		// Evaluating and sending the result in the format requested
 		if (CalculatorUtil.SCREEN.equals(resultFormat)) {
 			return new ResponseEntity<>(resultFormatPrinter.toScreen(Arrays.asList(result)), HttpStatus.OK);
 		} else {
@@ -68,9 +60,8 @@ public class CalculatorController {
 
 	@PostMapping
 	public ResponseEntity<String> calculateFromFile(@RequestPart("file") MultipartFile file,
-			@RequestPart("operation") String operation, @RequestParam("resultFormat") String resultFormat) {
+			@RequestParam("operation") String operation, @RequestParam("resultFormat") String resultFormat) {
 
-		// Validating parameters
 		if (null == file.getOriginalFilename()) {
 			return new ResponseEntity<>("Invalid file!", HttpStatus.BAD_REQUEST);
 		}
@@ -88,7 +79,6 @@ public class CalculatorController {
 			return new ResponseEntity<>("The result couldn't be processed!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		// Evaluating and sending the result in the format requested
 		if (CalculatorUtil.SCREEN.equals(resultFormat)) {
 			return new ResponseEntity<>(resultFormatPrinter.toScreen(results), HttpStatus.OK);
 		} else {
@@ -101,12 +91,6 @@ public class CalculatorController {
 
 		}
 
-	}
-
-	@GetMapping(value = "/get-file", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public @ResponseBody byte[] getFile() throws IOException {
-		FileInputStream fis = new FileInputStream(CalculatorUtil.FILE_NAME);
-		return IOUtils.toByteArray(fis);
 	}
 
 }
